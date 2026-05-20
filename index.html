@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Iso Studio — Isometric Sketch Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none">
+        <path d="M24 5 41 15 41 33 24 43 7 33 7 15Z" stroke="#1c2b4a" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M24 5 24 24 7 15M24 24 41 15M24 24 24 43" stroke="#2b6f8f" stroke-width="2.1" stroke-linejoin="round"/>
+        <circle cx="24" cy="24" r="2.6" fill="#e07a36"/>
+      </svg>
+      <div class="title">
+        <h1>Iso&nbsp;Studio</h1>
+        <p>SKETCH · COMBINE · LEVEL UP</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat lv"><div class="k">Level</div><div class="v" id="sLevel">1</div></div>
+      <div class="stat"><div class="k">Stage</div><div class="v" id="sCx">1</div></div>
+      <div class="stat st"><div class="k">Streak</div><div class="v" id="sStreak">0</div></div>
+      <div class="stat ac"><div class="k">Accuracy</div><div class="v" id="sAcc">—</div></div>
+      <div class="stat"><div class="k">XP</div><div class="v" id="sXp">0</div></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="brief">
+        <div class="refbox"><canvas id="refCanvas" width="540" height="260"></canvas></div>
+        <div class="taskmeta">
+          <div class="tname" id="tName">—</div>
+          <div class="tdesc" id="tDesc">—</div>
+          <div class="chips" id="tChips"></div>
+        </div>
+        <div class="howto" id="howto">
+          <b>How to sketch:</b> tap a dot, then tap another dot in line with it to draw an edge.
+          Tap <b>Erase</b> to remove a line. Match the <b>Target</b> exactly, then press <b>Check</b>.
+        </div>
+        <div class="ladder" id="ladder"></div>
+      </div>
+    </section>
+
+    <section class="panel studio" id="studio">
+      <canvas id="board"></canvas>
+      <div class="toolbar">
+        <button class="tbtn on" id="tDraw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20 14 10M14 10l4-6 4 4-6 4M14 10l2 2"/></svg><span>Draw</span></button>
+        <button class="tbtn" id="tErase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 18 16 8l4 4-8 8H7zM4 20h7"/></svg><span>Erase</span></button>
+        <button class="tbtn" id="tUndo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5 4 10l5 5M4 10h9a6 6 0 0 1 0 12h-3"/></svg><span>Undo</span></button>
+        <button class="tbtn" id="tClear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 7h12M9 7V5h6v2M8 7l1 13h6l1-13"/></svg><span>Clear</span></button>
+        <button class="tbtn" id="tBank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Bank</span></button>
+      </div>
+      <div class="hud">
+        <div class="verdict" id="verdict"></div>
+        <div class="scorebar" id="scoreWrap" style="display:none"><i id="scoreFill"></i></div>
+      </div>
+      <div class="actbar">
+        <button class="abtn" id="bHint">Hint</button>
+        <button class="abtn" id="bReveal">Reveal</button>
+        <button class="abtn primary" id="bCheck">Check ✓</button>
+        <button class="abtn primary" id="bNext" style="display:none">Next →</button>
+      </div>
+      <div class="ghost" id="ghost"></div>
+    </section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="modal">
+    <header>
+      <div class="title"><h1 style="font-size:18px">Task Bank</h1>
+      <p>7 LEVELS · ADAPTIVE PROGRESSION</p></div>
+      <button class="x" id="bankClose">×</button>
+    </header>
+    <div class="mbody"><div class="bank" id="bankGrid"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
