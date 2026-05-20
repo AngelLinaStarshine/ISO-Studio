@@ -1,3 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ece4d2">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Iso Studio � Isometric Sketch Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --paper:#f3ede0; --paper2:#ece4d2; --ink:#1c2b4a; --ink-soft:#46557a;
+    --line:#c8bda1; --line-strong:#a99a78;
+    --pencil:#e07a36; --pencil-soft:#f0a86b;
+    --good:#2f9468; --good-soft:#d6ebdf;
+    --bad:#cf4b38; --bad-soft:#f4ddd6;
+    --miss:#b9ad90; --accent:#2b6f8f; --gold:#caa23d;
+    --shadow:0 14px 34px -16px rgba(28,43,74,.42);
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overscroll-behavior:none}
+  body{
+    font-family:'Bricolage Grotesque',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    overflow:hidden;
+    background-image:
+      linear-gradient(rgba(28,43,74,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(28,43,74,.025) 1px,transparent 1px);
+    background-size:26px 26px;
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+    background:radial-gradient(circle at 16% 12%,transparent 60%,rgba(28,43,74,.07)),
+               radial-gradient(circle at 84% 88%,transparent 60%,rgba(28,43,74,.07))}
+  .wrap{height:100dvh;display:flex;flex-direction:column;max-width:1320px;margin:0 auto;padding:14px;gap:12px}
+
+  /* ---- Header ---- */
+  header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    border:1.5px solid var(--ink);border-radius:var(--r);background:var(--paper2);
+    padding:11px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  header::after{content:"ISO · DRAFTING STUDIO";position:absolute;right:-26px;top:9px;
+    transform:rotate(0);font:700 10px/1 'JetBrains Mono';letter-spacing:.28em;
+    color:var(--ink);opacity:.16}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .glyph{width:42px;height:42px;flex:none}
+  .title h1{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .title p{font:600 10.5px/1.4 'JetBrains Mono';color:var(--ink-soft);letter-spacing:.06em;margin-top:4px}
+  .stats{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+  .stat{background:var(--paper);border:1.5px solid var(--line-strong);border-radius:10px;
+    padding:7px 13px;text-align:center;min-width:74px}
+  .stat .k{font:700 9px/1 'JetBrains Mono';letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase}
+  .stat .v{font:800 19px/1.1 'Bricolage Grotesque';margin-top:4px;font-variant-numeric:tabular-nums}
+  .stat.lv .v{color:var(--accent)} .stat.st .v{color:var(--pencil)} .stat.ac .v{color:var(--good)}
+
+  /* ---- Main grid ---- */
+  main{flex:1;display:grid;grid-template-columns:300px 1fr;gap:12px;min-height:0}
+  .panel{border:1.5px solid var(--ink);border-radius:var(--r);background:var(--paper2);
+    box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0}
+  .panel h2{font:700 10px/1 'JetBrains Mono';letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);padding:13px 16px 0}
+
+  /* left brief */
+  .brief{padding:13px 16px;display:flex;flex-direction:column;gap:13px;overflow:auto}
+  .refbox{border:1.5px dashed var(--line-strong);border-radius:12px;background:var(--paper);
+    padding:22px 8px 8px;position:relative}
+  .refbox::before{content:"VIEWS — BUILD IN 3D";position:absolute;top:7px;left:9px;font:700 8.5px/1 'JetBrains Mono';
+    letter-spacing:.18em;color:var(--ink-soft)}
+  #refCanvas{width:100%;display:block;border-radius:8px;touch-action:none}
+  .taskmeta{font-size:13.5px;line-height:1.5}
+  .taskmeta .tname{font-weight:800;font-size:15px;margin-bottom:4px}
+  .taskmeta .tdesc{color:var(--ink-soft)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .chip{font:600 10px/1 'JetBrains Mono';letter-spacing:.04em;background:var(--paper);
+    border:1.3px solid var(--line-strong);border-radius:999px;padding:6px 10px;color:var(--ink-soft)}
+  .chip b{color:var(--ink)}
+  .howto{font-size:11.5px;line-height:1.55;color:var(--ink-soft);background:var(--paper);
+    border:1.3px solid var(--line);border-radius:10px;padding:10px 12px}
+  .howto b{color:var(--ink)}
+  .ladder{margin-top:auto;border-top:1.3px dashed var(--line-strong);padding-top:11px}
+  .ladder .row{display:flex;align-items:center;gap:7px;font:600 11px/1 'JetBrains Mono';
+    padding:5px 0;color:var(--ink-soft)}
+  .ladder .dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line-strong);flex:none}
+  .ladder .row.done .dot{background:var(--good);border-color:var(--good)}
+  .ladder .row.cur{color:var(--ink);font-weight:700}
+  .ladder .row.cur .dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,111,143,.2)}
+
+  /* studio (canvas) */
+  .studio{position:relative;overflow:hidden}
+  #board{position:absolute;inset:0;touch-action:none;cursor:crosshair}
+  .toolbar{position:absolute;left:14px;top:14px;display:flex;flex-direction:column;gap:7px;z-index:5}
+  .tbtn{font:700 11px/1 'JetBrains Mono';letter-spacing:.04em;background:var(--paper2);
+    border:1.5px solid var(--ink);border-radius:9px;padding:9px 11px;cursor:pointer;
+    display:flex;align-items:center;gap:7px;color:var(--ink);transition:.13s;min-width:104px;
+    touch-action:manipulation;-webkit-user-select:none;user-select:none}
+  .tbtn:hover{background:var(--ink);color:var(--paper)}
+  .tbtn.on{background:var(--pencil);border-color:var(--pencil);color:#fff}
+  .tbtn svg{width:15px;height:15px;flex:none}
+  .actbar{position:absolute;right:14px;bottom:14px;display:flex;gap:9px;z-index:5}
+  .abtn{font:800 13px/1 'Bricolage Grotesque';letter-spacing:.01em;border:1.5px solid var(--ink);
+    border-radius:11px;padding:13px 19px;cursor:pointer;transition:.14s;background:var(--paper2);color:var(--ink);
+    touch-action:manipulation;-webkit-user-select:none;user-select:none}
+  .abtn:hover{transform:translateY(-2px)}
+  .abtn.primary{background:var(--ink);color:var(--paper);box-shadow:0 8px 18px -8px rgba(28,43,74,.55)}
+  .abtn.primary:hover{background:var(--accent);border-color:var(--accent)}
+  .abtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+  .hud{position:absolute;right:14px;top:14px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .verdict{font:800 14px/1.2 'Bricolage Grotesque';border-radius:11px;padding:11px 16px;
+    border:1.5px solid;max-width:280px;text-align:right;opacity:0;transform:translateY(-6px);
+    transition:.28s;pointer-events:none}
+  .verdict.show{opacity:1;transform:none}
+  .verdict.pass{background:var(--good-soft);border-color:var(--good);color:#1d6b48}
+  .verdict.fail{background:var(--bad-soft);border-color:var(--bad);color:#992f22}
+  .verdict small{display:block;font:600 11px/1.4 'JetBrains Mono';margin-top:3px;opacity:.85}
+  .scorebar{width:160px;height:9px;background:var(--paper);border:1.5px solid var(--ink);
+    border-radius:99px;overflow:hidden}
+  .scorebar i{display:block;height:100%;width:0;background:var(--good);transition:.5s cubic-bezier(.5,0,.2,1)}
+
+  /* task bank modal */
+  .scrim{position:fixed;inset:0;background:rgba(28,43,74,.45);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
+  .scrim.show{display:flex}
+  .modal{background:var(--paper);border:1.5px solid var(--ink);border-radius:18px;
+    max-width:780px;width:100%;max-height:86vh;overflow:auto;box-shadow:var(--shadow)}
+  .modal header{border:0;border-bottom:1.5px dashed var(--line-strong);border-radius:0;
+    box-shadow:none;background:var(--paper2)}
+  .modal header::after{display:none}
+  .mbody{padding:18px}
+  .bank{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:13px}
+  .bcard{border:1.5px solid var(--line-strong);border-radius:13px;background:var(--paper2);
+    padding:12px;cursor:pointer;transition:.14s}
+  .bcard:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .bcard.locked{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+  .bcard canvas{width:100%;display:block;border-radius:8px;background:var(--paper);
+    border:1.3px dashed var(--line)}
+  .bcard .bl{font:800 13px/1.1 'Bricolage Grotesque';margin-top:9px}
+  .bcard .bs{font:600 10px/1.3 'JetBrains Mono';color:var(--ink-soft);margin-top:3px}
+  .bcard .bp{margin-top:7px;height:6px;background:var(--paper);border:1.2px solid var(--line-strong);
+    border-radius:99px;overflow:hidden}
+  .bcard .bp i{display:block;height:100%;background:var(--good)}
+  /* Textbook Practice section + card accent + task-name badge */
+  .bsec{grid-column:1/-1;font:700 11px/1 'JetBrains Mono';letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink);padding:4px 2px 0;
+    border-bottom:1.3px dashed var(--line-strong);padding-bottom:8px;margin-top:4px}
+  .bsec:first-child{margin-top:0}
+  .bsec span{font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:none;
+    color:var(--ink-soft);margin-left:6px}
+  .bcard.tb{border-color:var(--accent)}
+  .bcard.tb .bl{color:var(--accent)}
+  .tbBadge{display:inline-block;vertical-align:middle;margin-left:6px;
+    font:700 9px/1 'JetBrains Mono';letter-spacing:.12em;
+    background:var(--accent);color:#fff;padding:4px 7px;border-radius:6px}
+  .tbBadge.rem{background:var(--pencil)}
+  #bRetry{border-color:var(--pencil);color:var(--pencil)}
+  #bRetry:hover{background:var(--pencil);color:var(--paper);border-color:var(--pencil)}
+  .x{margin-left:auto;background:none;border:1.5px solid var(--ink);border-radius:9px;
+    width:34px;height:34px;font-size:18px;cursor:pointer;color:var(--ink)}
+  .x:hover{background:var(--ink);color:var(--paper)}
+  .ghost{position:absolute;left:14px;bottom:14px;z-index:5;font:600 10.5px/1.4 'JetBrains Mono';
+    color:var(--ink-soft);background:var(--paper2);border:1.3px solid var(--line-strong);
+    border-radius:9px;padding:8px 11px;max-width:240px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--paper);font:700 13px/1 'Bricolage Grotesque';
+    padding:13px 22px;border-radius:12px;opacity:0;transition:.3s;z-index:60;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+  /* ---- Tablets & phones ---- */
+  @media (max-width:860px){
+    .wrap{padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right))
+      max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));gap:8px}
+    header{padding:8px 12px;gap:10px}
+    header::after{display:none}
+    .glyph{width:36px;height:36px}
+    .title h1{font-size:18px}
+    .title p{display:none}
+    .stats{margin-left:0;width:100%;flex-wrap:nowrap;overflow-x:auto;
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;padding-bottom:2px}
+    .stats::-webkit-scrollbar{display:none}
+    .stat{min-width:58px;flex:0 0 auto;padding:6px 10px}
+    .stat .v{font-size:17px}
+    main{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:8px}
+    main > .panel:first-child{max-height:min(36dvh,280px);min-height:0}
+    .brief{padding:10px 12px;gap:8px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      flex-direction:column;flex-wrap:nowrap}
+    .refbox{width:100%;flex:none;padding:18px 6px 6px}
+    .taskmeta{min-width:0;width:100%}
+    .taskmeta .tname{font-size:14px}
+    .taskmeta .tdesc{font-size:12.5px}
+    .howto{width:100%;font-size:11px;padding:8px 10px;line-height:1.45}
+    .ladder{display:none}
+    .studio{min-height:48dvh}
+    .toolbar{flex-direction:row;flex-wrap:nowrap;left:8px;right:8px;top:8px;
+      bottom:auto;width:auto;justify-content:space-between;gap:5px}
+    .tbtn{min-width:44px;min-height:44px;width:auto;flex:1;padding:10px;justify-content:center}
+    .tbtn span{display:none}
+    .tbtn svg{width:18px;height:18px}
+    .hud{left:8px;right:8px;top:auto;bottom:calc(118px + env(safe-area-inset-bottom));
+      align-items:stretch;pointer-events:none}
+    .verdict{max-width:none;width:100%;text-align:left;font-size:13px;padding:10px 12px}
+    .scorebar{width:100%}
+    .ghost{left:8px;right:8px;top:60px;bottom:auto;
+      max-width:none;font-size:10px;padding:6px 9px;pointer-events:none}
+    .hud .verdict.show ~ .scorebar{margin-top:0}
+    .actbar{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));
+      display:grid;grid-template-columns:1fr 1fr;gap:6px;width:auto}
+    .actbar .abtn.primary,#bRetry{grid-column:1/-1}
+    .abtn{min-height:44px;padding:12px 10px;font-size:12px;text-align:center}
+    .abtn:hover{transform:none}
+    .tbtn:hover{background:var(--paper2);color:var(--ink)}
+    .tbtn.on:hover{background:var(--pencil);color:#fff}
+    .scrim{padding:0;align-items:flex-end}
+    .modal{max-height:min(88dvh,100%);border-radius:16px 16px 0 0;margin:0;width:100%}
+    .mbody{padding:14px;padding-bottom:max(14px,env(safe-area-inset-bottom))}
+    .bank{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .bcard{padding:10px}
+    .toast{bottom:calc(76px + env(safe-area-inset-bottom));width:min(100% - 20px,400px);
+      font-size:12px;padding:11px 16px;text-align:center}
+  }
+  @media (max-width:480px){
+    .stat.ac{display:none}
+    .chip{font-size:9px;padding:5px 8px}
+    .abtn{font-size:11px;padding:11px 8px}
+    .studio{min-height:52dvh}
+    .hud{bottom:calc(128px + env(safe-area-inset-bottom))}
+  }
+  @media (max-width:860px) and (orientation:landscape){
+    main{grid-template-columns:minmax(200px,34%) 1fr;grid-template-rows:1fr}
+    main > .panel:first-child{max-height:none}
+    .ladder{display:block}
+    .studio{min-height:0}
+    .hud{bottom:auto;top:8px;right:8px;left:auto;width:min(240px,42vw)}
+    .ghost{bottom:calc(64px + env(safe-area-inset-bottom));left:8px;right:auto;max-width:200px}
+    .actbar{grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}
+    .actbar .abtn.primary,#bRetry{grid-column:auto}
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none">
+        <path d="M24 5 41 15 41 33 24 43 7 33 7 15Z" stroke="#1c2b4a" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M24 5 24 24 7 15M24 24 41 15M24 24 24 43" stroke="#2b6f8f" stroke-width="2.1" stroke-linejoin="round"/>
+        <circle cx="24" cy="24" r="2.6" fill="#e07a36"/>
+      </svg>
+      <div class="title">
+        <h1>Iso&nbsp;Studio</h1>
+        <p>SKETCH · COMBINE · LEVEL UP</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat lv"><div class="k">Level</div><div class="v" id="sLevel">1</div></div>
+      <div class="stat"><div class="k">Stage</div><div class="v" id="sCx">1</div></div>
+      <div class="stat st"><div class="k">Streak</div><div class="v" id="sStreak">0</div></div>
+      <div class="stat ac"><div class="k">Accuracy</div><div class="v" id="sAcc">—</div></div>
+      <div class="stat"><div class="k">XP</div><div class="v" id="sXp">0</div></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="brief">
+        <div class="refbox"><canvas id="refCanvas" width="540" height="260"></canvas></div>
+        <div class="taskmeta">
+          <div class="tname" id="tName">—</div>
+          <div class="tdesc" id="tDesc">—</div>
+          <div class="chips" id="tChips"></div>
+        </div>
+        <div class="howto" id="howto">
+          <b>How to sketch:</b> tap a dot, then tap another dot in line with it to draw an edge.
+          Tap <b>Erase</b> to remove a line. Match the <b>Target</b> exactly, then press <b>Check</b>.
+        </div>
+        <div class="ladder" id="ladder"></div>
+      </div>
+    </section>
+
+    <section class="panel studio" id="studio">
+      <canvas id="board"></canvas>
+      <div class="toolbar">
+        <button type="button" class="tbtn on" id="tDraw" aria-label="Draw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20 14 10M14 10l4-6 4 4-6 4M14 10l2 2"/></svg><span>Draw</span></button>
+        <button type="button" class="tbtn" id="tErase" aria-label="Erase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 18 16 8l4 4-8 8H7zM4 20h7"/></svg><span>Erase</span></button>
+        <button type="button" class="tbtn" id="tUndo" aria-label="Undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5 4 10l5 5M4 10h9a6 6 0 0 1 0 12h-3"/></svg><span>Undo</span></button>
+        <button type="button" class="tbtn" id="tClear" aria-label="Clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 7h12M9 7V5h6v2M8 7l1 13h6l1-13"/></svg><span>Clear</span></button>
+        <button type="button" class="tbtn" id="tBank" aria-label="Task bank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Bank</span></button>
+      </div>
+      <div class="hud">
+        <div class="verdict" id="verdict"></div>
+        <div class="scorebar" id="scoreWrap" style="display:none"><i id="scoreFill"></i></div>
+      </div>
+      <div class="actbar">
+        <button class="abtn" id="bHint">Hint</button>
+        <button class="abtn" id="bReveal">Reveal</button>
+        <button class="abtn primary" id="bCheck">Check ✓</button>
+        <button class="abtn" id="bRetry" style="display:none">Try alternate shape →</button>
+        <button class="abtn primary" id="bNext" style="display:none">Continue →</button>
+      </div>
+      <div class="ghost" id="ghost"></div>
+    </section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="modal">
+    <header>
+      <div class="title"><h1 style="font-size:18px">Task Bank</h1>
+      <p>7 LEVELS · ADAPTIVE PROGRESSION</p></div>
+      <button class="x" id="bankClose">×</button>
+    </header>
+    <div class="mbody"><div class="bank" id="bankGrid"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js" defer></script>
+</body>
+<script>
 "use strict";
 /* ============================================================ *
  *  ISO STUDIO — Isometric Sketch Trainer
@@ -835,3 +1155,6 @@ if(window.visualViewport){
   newAdaptiveTask();
   renderHUD(); renderLadder();
 })();
+
+</script>
+</html>

@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#ece4d2">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Iso Studio — Isometric Sketch Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,11 +56,11 @@
     <section class="panel studio" id="studio">
       <canvas id="board"></canvas>
       <div class="toolbar">
-        <button class="tbtn on" id="tDraw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20 14 10M14 10l4-6 4 4-6 4M14 10l2 2"/></svg><span>Draw</span></button>
-        <button class="tbtn" id="tErase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 18 16 8l4 4-8 8H7zM4 20h7"/></svg><span>Erase</span></button>
-        <button class="tbtn" id="tUndo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5 4 10l5 5M4 10h9a6 6 0 0 1 0 12h-3"/></svg><span>Undo</span></button>
-        <button class="tbtn" id="tClear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 7h12M9 7V5h6v2M8 7l1 13h6l1-13"/></svg><span>Clear</span></button>
-        <button class="tbtn" id="tBank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Bank</span></button>
+        <button type="button" class="tbtn on" id="tDraw" aria-label="Draw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20 14 10M14 10l4-6 4 4-6 4M14 10l2 2"/></svg><span>Draw</span></button>
+        <button type="button" class="tbtn" id="tErase" aria-label="Erase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 18 16 8l4 4-8 8H7zM4 20h7"/></svg><span>Erase</span></button>
+        <button type="button" class="tbtn" id="tUndo" aria-label="Undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 5 4 10l5 5M4 10h9a6 6 0 0 1 0 12h-3"/></svg><span>Undo</span></button>
+        <button type="button" class="tbtn" id="tClear" aria-label="Clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 7h12M9 7V5h6v2M8 7l1 13h6l1-13"/></svg><span>Clear</span></button>
+        <button type="button" class="tbtn" id="tBank" aria-label="Task bank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Bank</span></button>
       </div>
       <div class="hud">
         <div class="verdict" id="verdict"></div>
@@ -67,7 +70,8 @@
         <button class="abtn" id="bHint">Hint</button>
         <button class="abtn" id="bReveal">Reveal</button>
         <button class="abtn primary" id="bCheck">Check ✓</button>
-        <button class="abtn primary" id="bNext" style="display:none">Next →</button>
+        <button class="abtn" id="bRetry" style="display:none">Try alternate shape →</button>
+        <button class="abtn primary" id="bNext" style="display:none">Continue →</button>
       </div>
       <div class="ghost" id="ghost"></div>
     </section>

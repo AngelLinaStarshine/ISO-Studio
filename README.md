@@ -11,6 +11,7 @@ Core 7.G.1 and 7.G.2.
 | `index.html`  | Page markup. Loads `styles.css` and `app.js`.              |
 | `styles.css`  | All styling: drafting-paper palette, layout, components.   |
 | `app.js`      | All logic: iso geometry, task bank, adaptive engine, UI.   |
+| `iso-studio-isometric-trainer.html` | Single-file bundle (same app).          |
 | `README.md`   | This file.                                                 |
 
 No build step. No dependencies. No server required.
@@ -70,9 +71,15 @@ Seven levels:
 7. Composites (three parts, asymmetric)
 
 Each level has multiple stages (`cx` 1–4) that increase shape
-complexity. Three strong solves in a row (score ≥88%, no hint)
-advance the stage, then the level. Two consecutive failures step
-back to easier work.
+complexity. **Every successful Check** advances one stage, then
+the level.
+
+If a learner cannot pass at their current level, they stay on that
+level and are offered remedial shapes: one **alternate** figure,
+then up to **three similar** practice figures. After five failed
+checks without passing, they restart at **Level 1** with the
+original lesson shapes. Textbook practice tasks do not affect
+adaptive level or XP.
 
 Progress persists across sessions via `window.storage` when the
 host supports it, with an in-memory fallback so it still runs from
