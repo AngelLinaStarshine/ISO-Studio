@@ -333,9 +333,12 @@ function computeField(){
   return {mnA,mxA,mnB,mxB};
 }
 function layout(){
-  const r=studio.getBoundingClientRect();
-  board.width=r.width*DPR; board.height=r.height*DPR;
-  board.style.width=r.width+'px'; board.style.height=r.height+'px';
+  let r=board.getBoundingClientRect();
+  if(r.width<2||r.height<2) r=studio.getBoundingClientRect();
+  board.width=Math.max(1,Math.floor(r.width*DPR));
+  board.height=Math.max(1,Math.floor(r.height*DPR));
+  board.style.width=Math.floor(r.width)+'px';
+  board.style.height=Math.floor(r.height)+'px';
   bctx.setTransform(DPR,0,0,DPR,0,0);
   const f=computeField();
   // fit field span to canvas
@@ -406,8 +409,8 @@ function updateGhost(){
 }
 function draw(){
   if(!view||!TASK) return;
-  const r=studio.getBoundingClientRect();
-  bctx.clearRect(0,0,r.width,r.height);
+  const r=board.getBoundingClientRect();
+  bctx.clearRect(0,0,r.width||board.width/DPR,r.height||board.height/DPR);
   // dot grid
   for(const d of dots){
     bctx.beginPath(); bctx.arc(d.x,d.y,Math.max(1.5,view.S*0.045),0,7);
@@ -826,9 +829,18 @@ function buildBank(){
 }
 
 /* ---------- boot ---------- */
-window.addEventListener('resize',()=>{ if(TASK) layout(); });
+function scheduleLayout(){
+  if(!TASK) return;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>layout()));
+}
+window.addEventListener('resize',scheduleLayout);
 if(window.visualViewport){
-  visualViewport.addEventListener('resize',()=>{ if(TASK) layout(); });
+  visualViewport.addEventListener('resize',scheduleLayout);
+}
+if(typeof ResizeObserver!=='undefined'){
+  const ro=new ResizeObserver(scheduleLayout);
+  ro.observe(studio);
+  ro.observe(board);
 }
 (async function(){
   await Eng.load();

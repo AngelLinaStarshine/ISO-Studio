@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#ece4d2">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Iso Studio � Isometric Sketch Trainer</title>
+<title>Iso Studio — Isometric Sketch Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
   header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
     border:1.5px solid var(--ink);border-radius:var(--r);background:var(--paper2);
     padding:11px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-  header::after{content:"ISO · DRAFTING STUDIO";position:absolute;right:-26px;top:9px;
+  header::after{content:"ISO Â· DRAFTING STUDIO";position:absolute;right:-26px;top:9px;
     transform:rotate(0);font:700 10px/1 'JetBrains Mono';letter-spacing:.28em;
     color:var(--ink);opacity:.16}
   .brand{display:flex;align-items:center;gap:12px;min-width:0}
@@ -67,7 +67,7 @@
   .brief{padding:13px 16px;display:flex;flex-direction:column;gap:13px;overflow:auto}
   .refbox{border:1.5px dashed var(--line-strong);border-radius:12px;background:var(--paper);
     padding:22px 8px 8px;position:relative}
-  .refbox::before{content:"VIEWS — BUILD IN 3D";position:absolute;top:7px;left:9px;font:700 8.5px/1 'JetBrains Mono';
+  .refbox::before{content:"VIEWS â€” BUILD IN 3D";position:absolute;top:7px;left:9px;font:700 8.5px/1 'JetBrains Mono';
     letter-spacing:.18em;color:var(--ink-soft)}
   #refCanvas{width:100%;display:block;border-radius:8px;touch-action:none}
   .taskmeta{font-size:13.5px;line-height:1.5}
@@ -89,9 +89,9 @@
   .ladder .row.cur .dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px rgba(43,111,143,.2)}
 
   /* studio (canvas) */
-  .studio{position:relative;overflow:hidden}
-  #board{position:absolute;inset:0;touch-action:none;cursor:crosshair}
-  .toolbar{position:absolute;left:14px;top:14px;display:flex;flex-direction:column;gap:7px;z-index:5}
+  .studio{position:relative;overflow:hidden;--dock-h:0px}
+  #board{position:absolute;inset:0;touch-action:none;cursor:crosshair;z-index:1}
+  .toolbar{position:absolute;left:14px;top:14px;display:flex;flex-direction:column;gap:7px;z-index:10}
   .tbtn{font:700 11px/1 'JetBrains Mono';letter-spacing:.04em;background:var(--paper2);
     border:1.5px solid var(--ink);border-radius:9px;padding:9px 11px;cursor:pointer;
     display:flex;align-items:center;gap:7px;color:var(--ink);transition:.13s;min-width:104px;
@@ -99,7 +99,8 @@
   .tbtn:hover{background:var(--ink);color:var(--paper)}
   .tbtn.on{background:var(--pencil);border-color:var(--pencil);color:#fff}
   .tbtn svg{width:15px;height:15px;flex:none}
-  .actbar{position:absolute;right:14px;bottom:14px;display:flex;gap:9px;z-index:5}
+  .actbar{position:absolute;right:14px;bottom:14px;display:flex;flex-wrap:wrap;gap:9px;
+    z-index:10;max-width:calc(100% - 28px);justify-content:flex-end}
   .abtn{font:800 13px/1 'Bricolage Grotesque';letter-spacing:.01em;border:1.5px solid var(--ink);
     border-radius:11px;padding:13px 19px;cursor:pointer;transition:.14s;background:var(--paper2);color:var(--ink);
     touch-action:manipulation;-webkit-user-select:none;user-select:none}
@@ -107,7 +108,7 @@
   .abtn.primary{background:var(--ink);color:var(--paper);box-shadow:0 8px 18px -8px rgba(28,43,74,.55)}
   .abtn.primary:hover{background:var(--accent);border-color:var(--accent)}
   .abtn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-  .hud{position:absolute;right:14px;top:14px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .hud{position:absolute;right:14px;top:14px;z-index:10;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
   .verdict{font:800 14px/1.2 'Bricolage Grotesque';border-radius:11px;padding:11px 16px;
     border:1.5px solid;max-width:280px;text-align:right;opacity:0;transform:translateY(-6px);
     transition:.28s;pointer-events:none}
@@ -166,47 +167,76 @@
     background:var(--ink);color:var(--paper);font:700 13px/1 'Bricolage Grotesque';
     padding:13px 22px;border-radius:12px;opacity:0;transition:.3s;z-index:60;pointer-events:none}
   .toast.show{opacity:1;transform:translateX(-50%)}
-  /* ---- Tablets & phones ---- */
+  /* ---- Tablets & phones: docked controls (Check always visible) ---- */
   @media (max-width:860px){
-    .wrap{padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right))
-      max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));gap:8px}
-    header{padding:8px 12px;gap:10px}
+    .wrap{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right))
+      max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));gap:6px}
+    header{padding:8px 10px;gap:8px}
     header::after{display:none}
-    .glyph{width:36px;height:36px}
-    .title h1{font-size:18px}
+    .glyph{width:34px;height:34px}
+    .title h1{font-size:17px}
     .title p{display:none}
     .stats{margin-left:0;width:100%;flex-wrap:nowrap;overflow-x:auto;
-      -webkit-overflow-scrolling:touch;scrollbar-width:none;gap:6px;padding-bottom:2px}
+      -webkit-overflow-scrolling:touch;scrollbar-width:none;gap:5px}
     .stats::-webkit-scrollbar{display:none}
-    .stat{min-width:58px;flex:0 0 auto;padding:6px 10px}
-    .stat .v{font-size:17px}
-    main{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:8px}
-    main > .panel:first-child{max-height:min(36dvh,280px);min-height:0}
-    .brief{padding:10px 12px;gap:8px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    .stat{min-width:54px;flex:0 0 auto;padding:5px 8px}
+    .stat .v{font-size:16px}
+    main{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);gap:6px;min-height:0}
+    main > .panel:first-child{max-height:min(30dvh,220px);min-height:0;flex-shrink:0}
+    .brief{padding:8px 10px;gap:6px;overflow-y:auto;-webkit-overflow-scrolling:touch;
       flex-direction:column;flex-wrap:nowrap}
-    .refbox{width:100%;flex:none;padding:18px 6px 6px}
-    .taskmeta{min-width:0;width:100%}
-    .taskmeta .tname{font-size:14px}
-    .taskmeta .tdesc{font-size:12.5px}
-    .howto{width:100%;font-size:11px;padding:8px 10px;line-height:1.45}
+    .refbox{width:100%;padding:16px 4px 4px}
+    .taskmeta .tname{font-size:13px}
+    .taskmeta .tdesc{font-size:12px}
+    .howto{font-size:10.5px;padding:7px 9px;line-height:1.4;max-height:3.6em;overflow:auto}
     .ladder{display:none}
-    .studio{min-height:48dvh}
-    .toolbar{flex-direction:row;flex-wrap:nowrap;left:8px;right:8px;top:8px;
-      bottom:auto;width:auto;justify-content:space-between;gap:5px}
-    .tbtn{min-width:44px;min-height:44px;width:auto;flex:1;padding:10px;justify-content:center}
+    .studio{
+      min-height:0;
+      display:grid;
+      grid-template-columns:1fr;
+      grid-template-rows:auto minmax(160px,1fr) auto auto;
+      grid-template-areas:"tools" "canvas" "hud" "actions";
+      gap:0;
+      overflow:hidden;
+    }
+    .toolbar{
+      grid-area:tools;position:relative;left:auto;right:auto;top:auto;bottom:auto;
+      flex-direction:row;margin:6px 6px 0;gap:4px;z-index:10;
+    }
+    .tbtn{min-width:0;min-height:44px;flex:1;padding:8px;justify-content:center}
     .tbtn span{display:none}
     .tbtn svg{width:18px;height:18px}
-    .hud{left:8px;right:8px;top:auto;bottom:calc(118px + env(safe-area-inset-bottom));
-      align-items:stretch;pointer-events:none}
-    .verdict{max-width:none;width:100%;text-align:left;font-size:13px;padding:10px 12px}
+    #board{
+      grid-area:canvas;position:relative;inset:auto;
+      width:100%;height:100%;min-height:160px;z-index:1;
+    }
+    .ghost{
+      grid-area:canvas;position:relative;align-self:start;justify-self:start;
+      margin:6px;max-width:calc(100% - 12px);font-size:10px;padding:5px 8px;
+      z-index:6;pointer-events:none;
+    }
+    .hud{
+      grid-area:hud;position:relative;left:auto;right:auto;top:auto;bottom:auto;
+      margin:4px 6px 0;align-items:stretch;pointer-events:none;z-index:10;
+    }
+    .verdict{max-width:none;width:100%;text-align:left;font-size:12px;padding:8px 10px}
     .scorebar{width:100%}
-    .ghost{left:8px;right:8px;top:60px;bottom:auto;
-      max-width:none;font-size:10px;padding:6px 9px;pointer-events:none}
-    .hud .verdict.show ~ .scorebar{margin-top:0}
-    .actbar{left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));
-      display:grid;grid-template-columns:1fr 1fr;gap:6px;width:auto}
-    .actbar .abtn.primary,#bRetry{grid-column:1/-1}
-    .abtn{min-height:44px;padding:12px 10px;font-size:12px;text-align:center}
+    .actbar{
+      grid-area:actions;position:relative;left:auto;right:auto;bottom:auto;
+      margin:6px 6px max(6px,env(safe-area-inset-bottom));width:auto;max-width:none;
+      display:grid;gap:6px;z-index:10;
+      grid-template-columns:1fr 1fr;
+      grid-template-areas:"hint reveal" "check check" "retry retry" "next next";
+    }
+    #bHint{grid-area:hint}
+    #bReveal{grid-area:reveal}
+    #bCheck{grid-area:check}
+    #bRetry{grid-area:retry}
+    #bNext{grid-area:next}
+    #bCheck,#bNext,#bRetry{grid-column:auto}
+    .abtn{min-height:46px;padding:12px 8px;font-size:12px;text-align:center;width:100%}
+    #bCheck,#bNext{font-size:13px;font-weight:800}
+    #bRetry{font-size:11px;line-height:1.25;padding:10px 8px}
     .abtn:hover{transform:none}
     .tbtn:hover{background:var(--paper2);color:var(--ink)}
     .tbtn.on:hover{background:var(--pencil);color:#fff}
@@ -215,25 +245,36 @@
     .mbody{padding:14px;padding-bottom:max(14px,env(safe-area-inset-bottom))}
     .bank{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
     .bcard{padding:10px}
-    .toast{bottom:calc(76px + env(safe-area-inset-bottom));width:min(100% - 20px,400px);
-      font-size:12px;padding:11px 16px;text-align:center}
+    .toast{bottom:calc(88px + env(safe-area-inset-bottom));width:min(100% - 16px,400px);
+      font-size:12px;padding:10px 14px;text-align:center}
   }
   @media (max-width:480px){
     .stat.ac{display:none}
-    .chip{font-size:9px;padding:5px 8px}
-    .abtn{font-size:11px;padding:11px 8px}
-    .studio{min-height:52dvh}
-    .hud{bottom:calc(128px + env(safe-area-inset-bottom))}
+    .chip{font-size:9px;padding:4px 7px}
+    main > .panel:first-child{max-height:min(28dvh,190px)}
+    .abtn{font-size:11px;min-height:44px}
+    #bCheck,#bNext{font-size:12px}
   }
   @media (max-width:860px) and (orientation:landscape){
-    main{grid-template-columns:minmax(200px,34%) 1fr;grid-template-rows:1fr}
+    main{grid-template-columns:minmax(180px,32%) 1fr;grid-template-rows:1fr;min-height:0}
     main > .panel:first-child{max-height:none}
     .ladder{display:block}
-    .studio{min-height:0}
-    .hud{bottom:auto;top:8px;right:8px;left:auto;width:min(240px,42vw)}
-    .ghost{bottom:calc(64px + env(safe-area-inset-bottom));left:8px;right:auto;max-width:200px}
-    .actbar{grid-template-columns:repeat(auto-fit,minmax(88px,1fr))}
-    .actbar .abtn.primary,#bRetry{grid-column:auto}
+    .howto{max-height:none}
+    .studio{
+      grid-template-rows:auto 1fr auto auto;
+      min-height:0;
+    }
+    #board{min-height:120px}
+    .actbar{
+      grid-template-columns:repeat(4,1fr);
+      grid-template-areas:"hint reveal check check" "retry retry next next";
+    }
+    #bCheck{grid-area:check}
+    #bNext{grid-area:next}
+    #bRetry{grid-area:retry}
+    .ghost{margin:4px;font-size:9px}
+    .hud{margin:2px 6px 0}
+    .toast{bottom:calc(72px + env(safe-area-inset-bottom))}
   }
 
 </style>
@@ -249,14 +290,14 @@
       </svg>
       <div class="title">
         <h1>Iso&nbsp;Studio</h1>
-        <p>SKETCH · COMBINE · LEVEL UP</p>
+        <p>SKETCH Â· COMBINE Â· LEVEL UP</p>
       </div>
     </div>
     <div class="stats">
       <div class="stat lv"><div class="k">Level</div><div class="v" id="sLevel">1</div></div>
       <div class="stat"><div class="k">Stage</div><div class="v" id="sCx">1</div></div>
       <div class="stat st"><div class="k">Streak</div><div class="v" id="sStreak">0</div></div>
-      <div class="stat ac"><div class="k">Accuracy</div><div class="v" id="sAcc">—</div></div>
+      <div class="stat ac"><div class="k">Accuracy</div><div class="v" id="sAcc">â€”</div></div>
       <div class="stat"><div class="k">XP</div><div class="v" id="sXp">0</div></div>
     </div>
   </header>
@@ -266,8 +307,8 @@
       <div class="brief">
         <div class="refbox"><canvas id="refCanvas" width="540" height="260"></canvas></div>
         <div class="taskmeta">
-          <div class="tname" id="tName">—</div>
-          <div class="tdesc" id="tDesc">—</div>
+          <div class="tname" id="tName">â€”</div>
+          <div class="tdesc" id="tDesc">â€”</div>
           <div class="chips" id="tChips"></div>
         </div>
         <div class="howto" id="howto">
@@ -294,9 +335,9 @@
       <div class="actbar">
         <button class="abtn" id="bHint">Hint</button>
         <button class="abtn" id="bReveal">Reveal</button>
-        <button class="abtn primary" id="bCheck">Check ✓</button>
-        <button class="abtn" id="bRetry" style="display:none">Try alternate shape →</button>
-        <button class="abtn primary" id="bNext" style="display:none">Continue →</button>
+        <button class="abtn primary" id="bCheck">Check âœ“</button>
+        <button class="abtn" id="bRetry" style="display:none">Try alternate shape â†’</button>
+        <button class="abtn primary" id="bNext" style="display:none">Continue â†’</button>
       </div>
       <div class="ghost" id="ghost"></div>
     </section>
@@ -307,8 +348,8 @@
   <div class="modal">
     <header>
       <div class="title"><h1 style="font-size:18px">Task Bank</h1>
-      <p>7 LEVELS · ADAPTIVE PROGRESSION</p></div>
-      <button class="x" id="bankClose">×</button>
+      <p>7 LEVELS Â· ADAPTIVE PROGRESSION</p></div>
+      <button class="x" id="bankClose">Ã—</button>
     </header>
     <div class="mbody"><div class="bank" id="bankGrid"></div></div>
   </div>
@@ -320,8 +361,8 @@
 <script>
 "use strict";
 /* ============================================================ *
- *  ISO STUDIO — Isometric Sketch Trainer
- *  Grade 7–8 · Common Core 7.G.1/7.G.2 · adaptive sketching
+ *  ISO STUDIO â€” Isometric Sketch Trainer
+ *  Grade 7â€“8 Â· Common Core 7.G.1/7.G.2 Â· adaptive sketching
  * ============================================================ */
 
 /* ---------- Storage (persist progress; graceful fallback) ---------- */
@@ -400,7 +441,7 @@ function genTask(level, cx, seed){
   if(level===1){
     cubes=[[0,0,0]];
     name='Single Unit Cube';
-    desc='Sketch one cube. Start at a dot, draw the three edges from that corner, then close each face — 9 lines in total.';
+    desc='Sketch one cube. Start at a dot, draw the three edges from that corner, then close each face â€” 9 lines in total.';
     parts=['1 cube','9 edges'];
   } else if(level===2){
     const len=2+Math.floor(rnd()*Math.min(cx+1,3)); // 2..4
@@ -414,16 +455,16 @@ function genTask(level, cx, seed){
     cubes=box(0,0,0,a,b,1); // remove a corner -> L
     cubes=cubes.filter(c=>!(c[0]===a-1 && c[1]===b-1));
     name='Flat L-Shape';
-    desc=`A flat layer ${a}×${b} with one corner cube removed, forming an L. All on the ground level.`;
+    desc=`A flat layer ${a}Ã—${b} with one corner cube removed, forming an L. All on the ground level.`;
     parts=[`${a*b-1} cubes`,'L footprint','flat'];
   } else if(level===4){
     const a=2+Math.floor(rnd()*Math.min(cx,3)), b=1+Math.floor(rnd()*Math.min(cx,2)), c=1+Math.floor(rnd()*2);
     cubes=box(0,0,0,a,b,c);
-    name=`Solid Box ${a}×${b}×${c}`;
-    desc=`A full rectangular box, ${a} wide · ${b} deep · ${c} tall. Notice the three visible faces meet at the front corner.`;
-    parts=[`${a*b*c} cubes`,'box',`${a}×${b}×${c}`];
+    name=`Solid Box ${a}Ã—${b}Ã—${c}`;
+    desc=`A full rectangular box, ${a} wide Â· ${b} deep Â· ${c} tall. Notice the three visible faces meet at the front corner.`;
+    parts=[`${a*b*c} cubes`,'box',`${a}Ã—${b}Ã—${c}`];
   } else if(level===5){
-    // base slab + tower at an edge — TWO PARTS, different SIZES
+    // base slab + tower at an edge â€” TWO PARTS, different SIZES
     const a=2+Math.floor(rnd()*2), b=2+Math.floor(rnd()*2);
     const base=box(0,0,0,a,b,1);
     const tw=1+Math.floor(rnd()*Math.min(cx,2)), th=1+Math.floor(rnd()*Math.min(cx+1,3));
@@ -431,8 +472,8 @@ function genTask(level, cx, seed){
     const tower=box(where[1],where[2],1,tw,tw,th);
     cubes=dedupe(base.concat(tower));
     name='Base + Tower';
-    desc=`Part A: a ${a}×${b} base slab. Part B: a ${tw}×${tw}×${th} tower joined on top of the ${where[0]} edge. Two parts, different sizes — combine them cleanly.`;
-    parts=[`Part A ${a}×${b}×1`,`Part B ${tw}×${tw}×${th}`,`join: ${where[0]} edge`];
+    desc=`Part A: a ${a}Ã—${b} base slab. Part B: a ${tw}Ã—${tw}Ã—${th} tower joined on top of the ${where[0]} edge. Two parts, different sizes â€” combine them cleanly.`;
+    parts=[`Part A ${a}Ã—${b}Ã—1`,`Part B ${tw}Ã—${tw}Ã—${th}`,`join: ${where[0]} edge`];
   } else if(level===6){
     // staircase ascending toward the viewer (viewer-monotone & safe)
     const steps=2+Math.floor(rnd()*Math.min(cx+1,4)); // 2..5
@@ -443,7 +484,7 @@ function genTask(level, cx, seed){
     name=`${steps}-Step Staircase`;
     desc=`A staircase of ${steps} steps, each ${wide} deep, climbing upward. Each step is one cube taller than the one in front of it.`;
     parts=[`${steps} steps`,`${cubes.length} cubes`,'increasing height'];
-  } else { // level 7 — composite: base + tower + wing, asymmetric, larger
+  } else { // level 7 â€” composite: base + tower + wing, asymmetric, larger
     const a=3+Math.floor(rnd()*2), b=2+Math.floor(rnd()*2);
     const base=box(0,0,0,a,b,1);
     const tw=1+Math.floor(rnd()*2), th=2+Math.floor(rnd()*Math.min(cx,3));
@@ -452,7 +493,7 @@ function genTask(level, cx, seed){
     const wing=box(0,b,0,2,1,wh);
     cubes=dedupe(base.concat(tower,wing));
     name='Composite Structure';
-    desc=`Three parts: a ${a}×${b} base, a ${tw}×${tw}×${th} tower on the right-front, and a ${2}×1×${wh} wing extending off the left edge. Sketch each part, then merge them.`;
+    desc=`Three parts: a ${a}Ã—${b} base, a ${tw}Ã—${tw}Ã—${th} tower on the right-front, and a ${2}Ã—1Ã—${wh} wing extending off the left edge. Sketch each part, then merge them.`;
     parts=[`${cubes.length} cubes`,'3 parts','asymmetric'];
   }
   // normalise to non-negative coords
@@ -473,9 +514,9 @@ const MAX_CX={1:1,2:3,3:2,4:3,5:3,6:4,7:3};
  * Practice tasks DO NOT affect adaptive progression. */
 const TEXTBOOK_TASKS = [
   { name:'Vertical L', cubes:[[0,0,0],[1,0,0],[0,0,1]],
-    desc:'A horizontal row of 2 cubes with one more standing on top of the left cube — like a small L lying on its side.' },
+    desc:'A horizontal row of 2 cubes with one more standing on top of the left cube â€” like a small L lying on its side.' },
   { name:'Pillar', cubes:[[0,0,0],[0,0,1],[0,0,2]],
-    desc:'Three cubes stacked straight up — a simple vertical column.' },
+    desc:'Three cubes stacked straight up â€” a simple vertical column.' },
   { name:'Corner', cubes:[[0,0,0],[1,0,0],[0,1,0]],
     desc:'Three cubes forming a flat L on the ground.' },
   { name:'Tall Corner', cubes:[[0,0,0],[1,0,0],[0,1,0],[0,1,1]],
@@ -483,15 +524,15 @@ const TEXTBOOK_TASKS = [
   { name:'Small Step', cubes:[[0,0,0],[1,0,0],[1,0,1]],
     desc:'Two cubes at the front, with one more standing on top of the right cube.' },
   { name:'Chair', cubes:[[0,0,0],[1,0,0],[0,1,0],[1,1,0],[0,1,1],[1,1,1]],
-    desc:'A 2×2 seat with a 2×1 backrest standing along the back edge.' },
+    desc:'A 2Ã—2 seat with a 2Ã—1 backrest standing along the back edge.' },
   { name:'T-Block', cubes:[[0,1,0],[1,1,0],[2,1,0],[1,0,0]],
-    desc:'A row of 3 cubes with one extra cube attached to the middle — a flat T.' },
+    desc:'A row of 3 cubes with one extra cube attached to the middle â€” a flat T.' },
   { name:'Plus Sign', cubes:[[1,0,0],[0,1,0],[1,1,0],[2,1,0],[1,2,0]],
     desc:'Five cubes arranged in a + shape (cross), all on the ground.' },
   { name:'U-Shape', cubes:[[0,0,0],[0,1,0],[0,2,0],[1,2,0],[2,2,0],[2,1,0],[2,0,0]],
-    desc:'A flat U opening toward the front — seven cubes around three sides of a square.' },
+    desc:'A flat U opening toward the front â€” seven cubes around three sides of a square.' },
   { name:'Twin Pillars', cubes:[[0,0,0],[0,0,1],[2,0,0],[2,0,1],[1,0,0]],
-    desc:'Two 2-tall columns connected by a single cube at the base — like the letter Π.' },
+    desc:'Two 2-tall columns connected by a single cube at the base â€” like the letter Î .' },
 ];
 function genTextbookTask(idx){
   const t=TEXTBOOK_TASKS[idx];
@@ -535,26 +576,26 @@ const Eng = {
       // advance one step after every successful completion
       if(p.cx < MAX_CX[p.level]) {
         p.cx++;
-        this._evt='Stage up — next shape is a bit harder.';
+        this._evt='Stage up â€” next shape is a bit harder.';
       } else if(p.level < 7) {
         p.level++;
         p.cx = 1;
-        this._evt=`Level up → ${LEVEL_NAMES[p.level]}!`;
+        this._evt=`Level up â†’ ${LEVEL_NAMES[p.level]}!`;
       } else {
-        this._evt='You topped the ladder — press Continue for more practice.';
+        this._evt='You topped the ladder â€” press Continue for more practice.';
       }
     } else {
       p.streak=0;
       p.failAttempts=(p.failAttempts||0)+1;
-      // 1 fail → alternate; 2–4 → similar practice; 5th fail → restart at Level 1
+      // 1 fail â†’ alternate; 2â€“4 â†’ similar practice; 5th fail â†’ restart at Level 1
       if(p.failAttempts>=5){
         p.level=1; p.cx=1; p.failAttempts=0;
         this._justReset=true;
-        this._evt='Starting fresh from Level 1 — back to the original shapes.';
+        this._evt='Starting fresh from Level 1 â€” back to the original shapes.';
       } else if(p.failAttempts===1){
         this._evt='Try an alternate shape at the same level.';
       } else {
-        this._evt='Similar shape — same level, new figure to practice.';
+        this._evt='Similar shape â€” same level, new figure to practice.';
       }
     }
     return this._evt;
@@ -653,9 +694,12 @@ function computeField(){
   return {mnA,mxA,mnB,mxB};
 }
 function layout(){
-  const r=studio.getBoundingClientRect();
-  board.width=r.width*DPR; board.height=r.height*DPR;
-  board.style.width=r.width+'px'; board.style.height=r.height+'px';
+  let r=board.getBoundingClientRect();
+  if(r.width<2||r.height<2) r=studio.getBoundingClientRect();
+  board.width=Math.max(1,Math.floor(r.width*DPR));
+  board.height=Math.max(1,Math.floor(r.height*DPR));
+  board.style.width=Math.floor(r.width)+'px';
+  board.style.height=Math.floor(r.height)+'px';
   bctx.setTransform(DPR,0,0,DPR,0,0);
   const f=computeField();
   // fit field span to canvas
@@ -721,19 +765,19 @@ function drawScene(ctx,o,opts){
 }
 function updateGhost(){
   const g=document.getElementById('ghost'); if(!g||!TASK) return;
-  g.innerHTML = `<b style="color:var(--ink)">${userEdges.size}</b> lines drawn · target <b style="color:var(--ink)">${TASK.edgeCount}</b>` +
-    (mode==='erase'?' · <span style="color:var(--bad)">erase mode</span>':'');
+  g.innerHTML = `<b style="color:var(--ink)">${userEdges.size}</b> lines drawn Â· target <b style="color:var(--ink)">${TASK.edgeCount}</b>` +
+    (mode==='erase'?' Â· <span style="color:var(--bad)">erase mode</span>':'');
 }
 function draw(){
   if(!view||!TASK) return;
-  const r=studio.getBoundingClientRect();
-  bctx.clearRect(0,0,r.width,r.height);
+  const r=board.getBoundingClientRect();
+  bctx.clearRect(0,0,r.width||board.width/DPR,r.height||board.height/DPR);
   // dot grid
   for(const d of dots){
     bctx.beginPath(); bctx.arc(d.x,d.y,Math.max(1.5,view.S*0.045),0,7);
     bctx.fillStyle='rgba(28,43,74,.32)'; bctx.fill();
   }
-  // START anchor — shows where to begin (placement doesn't affect score)
+  // START anchor â€” shows where to begin (placement doesn't affect score)
   if(startDot && userEdges.size===0 && !feedback){
     const s=screenOf(startDot.A,startDot.B,view);
     const t=(Date.now()%1400)/1400, pr=view.S*(0.16+0.10*Math.sin(t*6.283));
@@ -782,7 +826,7 @@ function draw(){
     bctx.strokeStyle=col;
     bctx.beginPath();bctx.moveTo(a.x,a.y);bctx.lineTo(b.x,b.y);bctx.stroke();
   }
-  // missing edges after a check — drawn where the learner actually placed
+  // missing edges after a check â€” drawn where the learner actually placed
   // their figure (target shifted back by the matched offset)
   if(feedback){
     bctx.save(); bctx.setLineDash([5,6]); bctx.strokeStyle='rgba(185,173,144,.9)';
@@ -819,7 +863,7 @@ function draw(){
   }
 }
 
-/* reference render — show simple FRONT / SIDE / TOP square views
+/* reference render â€” show simple FRONT / SIDE / TOP square views
  * (NOT the finished isometric drawing). The learner studies these
  * flat shapes and must construct the 3D isometric figure themselves. */
 function orthoGrids(cubes){
@@ -886,8 +930,8 @@ function loadTask(t){
   ec.innerHTML=`target: <b>${t.edgeCount} edges</b>`; ch.appendChild(ec);
   document.getElementById('howto').style.display = t.level===1?'block':'block';
   document.getElementById('howto').innerHTML = t.level===1
-    ? `<b>Study the object</b> on the left, then build its 2D isometric drawing on the dots. Begin at the glowing <b style="color:var(--accent)">START HERE</b> dot: draw the three edges leaving that corner, then close each of the three faces (a cube is only 9 lines — the hidden back corner isn't drawn). <b>Where you place it on the grid doesn't matter — only the shape is scored.</b>`
-    : `<b>Study the object</b> on the left, then reproduce it in 2D isometric. Start at the <b style="color:var(--accent)">START HERE</b> dot, tap dot-to-dot to draw each edge (drag works too), <b>Erase</b> to fix. Position on the grid is free — only the <b>shape</b> is checked. Then press <b>Check</b>.`;
+    ? `<b>Study the object</b> on the left, then build its 2D isometric drawing on the dots. Begin at the glowing <b style="color:var(--accent)">START HERE</b> dot: draw the three edges leaving that corner, then close each of the three faces (a cube is only 9 lines â€” the hidden back corner isn't drawn). <b>Where you place it on the grid doesn't matter â€” only the shape is scored.</b>`
+    : `<b>Study the object</b> on the left, then reproduce it in 2D isometric. Start at the <b style="color:var(--accent)">START HERE</b> dot, tap dot-to-dot to draw each edge (drag works too), <b>Erase</b> to fix. Position on the grid is free â€” only the <b>shape</b> is checked. Then press <b>Check</b>.`;
   document.getElementById('verdict').className='verdict';
   document.getElementById('scoreWrap').style.display='none';
   setActionButtons({});
@@ -904,7 +948,7 @@ function loadRemedialTask(){
   t.remedialKind = attempt===1 ? 'alternate' : 'similar';
   loadTask(t);
   const rb=document.getElementById('bRetry');
-  if(rb) rb.textContent = attempt===1 ? 'Try alternate shape →' : 'Try similar shape →';
+  if(rb) rb.textContent = attempt===1 ? 'Try alternate shape â†’' : 'Try similar shape â†’';
 }
 
 /* ---------- HUD ---------- */
@@ -915,7 +959,7 @@ function renderHUD(){
   document.getElementById('sStreak').textContent=p.streak;
   document.getElementById('sXp').textContent=p.xp;
   const a=Eng.rollingAcc();
-  document.getElementById('sAcc').textContent = a==null?'—':Math.round(a*100)+'%';
+  document.getElementById('sAcc').textContent = a==null?'â€”':Math.round(a*100)+'%';
 }
 function renderLadder(){
   const L=document.getElementById('ladder'); L.innerHTML='';
@@ -924,7 +968,7 @@ function renderLadder(){
     const cur = lv===Eng.prof.level;
     const r=document.createElement('div');
     r.className='row'+(cur?' cur':'')+(lv<Eng.prof.level?' done':'');
-    r.innerHTML=`<span class="dot"></span> L${lv} · ${LEVEL_NAMES[lv]}`;
+    r.innerHTML=`<span class="dot"></span> L${lv} Â· ${LEVEL_NAMES[lv]}`;
     L.appendChild(r);
   }
 }
@@ -935,7 +979,7 @@ function toast(msg){
 function setActionButtons({passed=false, showRetry=false, showFreshStart=false}={}){
   document.getElementById('bCheck').style.display = (passed || showFreshStart) ? 'none' : '';
   document.getElementById('bNext').style.display = (passed || showFreshStart) ? '' : 'none';
-  document.getElementById('bNext').textContent = showFreshStart ? 'Start Level 1 →' : 'Continue →';
+  document.getElementById('bNext').textContent = showFreshStart ? 'Start Level 1 â†’' : 'Continue â†’';
   const retry=document.getElementById('bRetry');
   if(retry) retry.style.display = showRetry ? '' : 'none';
 }
@@ -1027,7 +1071,7 @@ document.getElementById('tClear').onclick=()=>{
   feedback=null; draw();
 };
 document.getElementById('bHint').onclick=()=>{ usedHint=true;
-  document.getElementById('bHint').disabled=true; toast('Faint guide shown — counts as assisted.'); draw(); };
+  document.getElementById('bHint').disabled=true; toast('Faint guide shown â€” counts as assisted.'); draw(); };
 document.getElementById('bReveal').onclick=()=>{
   revealed=!revealed; usedHint=true;
   document.getElementById('bReveal').textContent=revealed?'Hide':'Reveal'; draw();
@@ -1043,22 +1087,22 @@ document.getElementById('bCheck').onclick=async()=>{
   }
   const v=document.getElementById('verdict');
   v.className='verdict show '+(g.passed?'pass':'fail');
-  let failMsg='Not quite — keep refining, or try an alternate shape.';
+  let failMsg='Not quite â€” keep refining, or try an alternate shape.';
   if(!g.passed && !TASK.isTextbook){
     const fa=Eng.prof.failAttempts;
     if(Eng._justReset) failMsg='Let\'s rebuild from <b>Level 1</b> with the original lesson shapes.';
-    else if(fa===1) failMsg='Not quite — press <b>Try alternate shape</b> for a fresh figure at this level.';
-    else if(fa>=2 && fa<=4) failMsg='Keep going — press <b>Try similar shape</b> or keep refining on the dots.';
-    else if(fa>=1) failMsg='Not quite — try an alternate or similar shape, or keep refining.';
+    else if(fa===1) failMsg='Not quite â€” press <b>Try alternate shape</b> for a fresh figure at this level.';
+    else if(fa>=2 && fa<=4) failMsg='Keep going â€” press <b>Try similar shape</b> or keep refining on the dots.';
+    else if(fa>=1) failMsg='Not quite â€” try an alternate or similar shape, or keep refining.';
   }
   v.innerHTML = (g.passed
     ? (TASK.isTextbook
-      ? '✓ Correct sketch! Press <b>Continue</b> for the next textbook shape.'
-      : '✓ Correct sketch! Press <b>Continue</b> for the next challenge.')
+      ? 'âœ“ Correct sketch! Press <b>Continue</b> for the next textbook shape.'
+      : 'âœ“ Correct sketch! Press <b>Continue</b> for the next challenge.')
     : failMsg)+
     `<small>${g.matched}/${g.total} edges right`+
-    (g.extra?` · ${g.extra} extra`:'')+(g.missing?` · ${g.missing} missing`:'')+
-    ` · ${Math.round(g.score*100)}%</small>`;
+    (g.extra?` Â· ${g.extra} extra`:'')+(g.missing?` Â· ${g.missing} missing`:'')+
+    ` Â· ${Math.round(g.score*100)}%</small>`;
   document.getElementById('scoreWrap').style.display='';
   document.getElementById('scoreFill').style.width=Math.round(g.score*100)+'%';
   document.getElementById('scoreFill').style.background=g.passed?'#2f9468':'#cf4b38';
@@ -1069,7 +1113,7 @@ document.getElementById('bCheck').onclick=async()=>{
   if(showRetry){
     const rb=document.getElementById('bRetry');
     if(rb) rb.textContent = Eng.prof.failAttempts===1
-      ? 'Try alternate shape →' : 'Try similar shape →';
+      ? 'Try alternate shape â†’' : 'Try similar shape â†’';
   }
   if(freshStart) Eng._justReset=false;
   if(g.passed && evt) toast(evt);
@@ -1098,7 +1142,7 @@ function buildBank(){
   // --- Textbook Practice section ---
   const tbHead=document.createElement('div');
   tbHead.className='bsec';
-  tbHead.innerHTML='TEXTBOOK PRACTICE <span>· grade 7–8 shapes · does not affect your level</span>';
+  tbHead.innerHTML='TEXTBOOK PRACTICE <span>Â· grade 7â€“8 shapes Â· does not affect your level</span>';
   g.appendChild(tbHead);
   for(let i=0;i<TEXTBOOK_TASKS.length;i++){
     const sample=genTextbookTask(i);
@@ -1110,7 +1154,7 @@ function buildBank(){
     drawScene(cv.getContext('2d'),o,{target:sample.target,fill:true,color:'#1c2b4a'});
     const meta=document.createElement('div');
     meta.innerHTML=`<div class="bl">${sample.name}</div>
-      <div class="bs">${sample.cubes.length} cubes · ${sample.edgeCount} edges</div>`;
+      <div class="bs">${sample.cubes.length} cubes Â· ${sample.edgeCount} edges</div>`;
     card.appendChild(meta);
     card.onclick=()=>{ scrim.classList.remove('show'); loadTask(sample); };
     g.appendChild(card);
@@ -1119,7 +1163,7 @@ function buildBank(){
   // --- Adaptive levels section ---
   const adHead=document.createElement('div');
   adHead.className='bsec';
-  adHead.innerHTML='ADAPTIVE LEVELS <span>· difficulty rises as you improve</span>';
+  adHead.innerHTML='ADAPTIVE LEVELS <span>Â· difficulty rises as you improve</span>';
   g.appendChild(adHead);
   for(let lv=1;lv<=7;lv++){
     const sample=genTask(lv,1, 7777+lv*131);
@@ -1135,8 +1179,8 @@ function buildBank(){
     const pass=Object.keys(m).filter(k=>k.startsWith(lv+'.')).reduce((s,k)=>s+m[k].pass,0);
     const pct = tries? Math.round(pass/tries*100):0;
     const meta=document.createElement('div');
-    meta.innerHTML=`<div class="bl">L${lv} · ${LEVEL_NAMES[lv]}</div>
-      <div class="bs">${unlocked?(tries?pass+'/'+tries+' solved':'unlocked'):'locked — reach level '+lv}</div>
+    meta.innerHTML=`<div class="bl">L${lv} Â· ${LEVEL_NAMES[lv]}</div>
+      <div class="bs">${unlocked?(tries?pass+'/'+tries+' solved':'unlocked'):'locked â€” reach level '+lv}</div>
       <div class="bp"><i style="width:${pct}%"></i></div>`;
     card.appendChild(meta);
     if(unlocked) card.onclick=()=>{ scrim.classList.remove('show');
@@ -1146,9 +1190,18 @@ function buildBank(){
 }
 
 /* ---------- boot ---------- */
-window.addEventListener('resize',()=>{ if(TASK) layout(); });
+function scheduleLayout(){
+  if(!TASK) return;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>layout()));
+}
+window.addEventListener('resize',scheduleLayout);
 if(window.visualViewport){
-  visualViewport.addEventListener('resize',()=>{ if(TASK) layout(); });
+  visualViewport.addEventListener('resize',scheduleLayout);
+}
+if(typeof ResizeObserver!=='undefined'){
+  const ro=new ResizeObserver(scheduleLayout);
+  ro.observe(studio);
+  ro.observe(board);
 }
 (async function(){
   await Eng.load();
