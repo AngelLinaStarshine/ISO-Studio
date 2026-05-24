@@ -321,7 +321,27 @@ let feedback=null;      // {grade} after Check
 let revealed=false, usedHint=false, locked=false;
 
 /* dot field: a generous parallelogram of (A,B) that always covers tasks */
-function computeField(){
+function fieldMargin(){
+  const vw=window.innerWidth||0;
+  if(vw>=1200) return 2;
+  if(vw>=860) return 3;
+  return 4;
+}
+function boardPadding(rect){
+  const vw=window.innerWidth||0;
+  const short=Math.min(rect.width,rect.height);
+  if(vw<860) return Math.max(24,Math.min(40,short*0.09));
+  if(vw>=1200) return 48;
+  return 42;
+}
+function boardRect(){
+  const br=board.getBoundingClientRect(), sr=studio.getBoundingClientRect();
+  if(br.width<2||br.height<2||br.width*br.height<sr.width*sr.height*0.85)
+    return {width:sr.width,height:sr.height};
+  return {width:br.width,height:br.height};
+}
+function computeField(margin){
+  const M=margin!==undefined?margin:fieldMargin();
   // bounds from current task corners + margin
   let mnA=1e9,mxA=-1e9,mnB=1e9,mxB=-1e9;
   for(const [i,j,k] of TASK.cubes)
@@ -329,12 +349,11 @@ function computeField(){
       const [A,B]=toAB(i+di,j+dj,k+dk);
       mnA=Math.min(mnA,A);mxA=Math.max(mxA,A);mnB=Math.min(mnB,B);mxB=Math.max(mxB,B);
     }
-  const M=4; mnA-=M;mxA+=M;mnB-=M;mxB+=M;
+  mnA-=M;mxA+=M;mnB-=M;mxB+=M;
   return {mnA,mxA,mnB,mxB};
 }
 function layout(){
-  let r=board.getBoundingClientRect();
-  if(r.width<2||r.height<2) r=studio.getBoundingClientRect();
+  const r=boardRect();
   board.width=Math.max(1,Math.floor(r.width*DPR));
   board.height=Math.max(1,Math.floor(r.height*DPR));
   board.style.width=Math.floor(r.width)+'px';
@@ -346,7 +365,7 @@ function layout(){
   let mnX=1e9,mxX=-1e9,mnY=1e9,mxY=-1e9;
   for(const [A,B] of cs){ const ux=(A-B)*COS30, uy=(A+B)*SIN30;
     mnX=Math.min(mnX,ux);mxX=Math.max(mxX,ux);mnY=Math.min(mnY,uy);mxY=Math.max(mxY,uy); }
-  const pad=46;
+  const pad=boardPadding(r);
   const S=Math.min((r.width-2*pad)/((mxX-mnX)||1),(r.height-2*pad)/((mxY-mnY)||1));
   view={S, ox:r.width/2-((mnX+mxX)/2)*S, oy:r.height/2-((mnY+mxY)/2)*S};
   dots=[];
